@@ -285,7 +285,7 @@ export const Container = React.memo(
       const onLayout = React.useCallback(
         (event: LayoutChangeEvent) => {
           const height = event.nativeEvent.layout.height
-          if (containerHeight.value !== height) containerHeight.value = height
+          if (containerHeight.value !== height) containerHeight.value = height - minHeaderHeight
         },
         [containerHeight]
       )
