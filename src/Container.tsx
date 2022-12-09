@@ -421,6 +421,7 @@ export const Container = React.memo(
                     tabProps,
                   })}
               </View>
+              <View style={{ height: 1, backgroundColor: '#DDDDDD'}}/>
             </Animated.View>
 
             <AnimatedPagerView
@@ -474,9 +475,6 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
   },
   tabBarContainer: {
     zIndex: 1,
