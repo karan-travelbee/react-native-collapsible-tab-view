@@ -5,6 +5,7 @@ import {
   SectionList,
   StyleProp,
   ViewStyle,
+  ColorValue
 } from 'react-native'
 import PagerView, { PagerViewProps } from 'react-native-pager-view'
 import Animated from 'react-native-reanimated'
@@ -128,6 +129,10 @@ export type CollapsibleProps = {
    * @default false
    */
   allowHeaderOverscroll?: boolean
+  /**
+   * bottom border color
+   */
+  bottomBorderColor?: string | ColorValue
 }
 
 export type ContextType<T extends TabName = TabName> = {

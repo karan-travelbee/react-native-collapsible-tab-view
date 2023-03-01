@@ -81,6 +81,7 @@ export const Container = React.memo(
         onTabChange,
         width: customWidth,
         allowHeaderOverscroll,
+        bottomBorderColor
       },
       ref
     ) => {
@@ -421,7 +422,7 @@ export const Container = React.memo(
                     tabProps,
                   })}
               </View>
-              <View style={{ height: 1, backgroundColor: '#DDDDDD'}}/>
+              <View style={{ height: 1, backgroundColor: bottomBorderColor}}/>
             </Animated.View>
 
             <AnimatedPagerView
