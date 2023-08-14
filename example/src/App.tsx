@@ -19,8 +19,11 @@ import ConditionalTabs from './ConditionalTabs'
 import Default from './Default'
 import DefaultCustomLabels from './DefaultCustomLabels'
 import DynamicTabs from './DynamicTabs'
+import FlashList from './FlashList'
 import HeaderOverscrollExample from './HeaderOverscroll'
 import Lazy from './Lazy'
+import LazyNoFade from './LazyNoFade'
+import MasonryFlashList from './MasonryFlashList'
 import MinHeaderHeight from './MinHeaderHeight'
 import OnTabChange from './OnTabChange'
 import QuickStartDemo from './QuickStartDemo'
@@ -36,11 +39,14 @@ import { ExampleComponentType } from './types'
 
 const EXAMPLE_COMPONENTS: ExampleComponentType[] = [
   Default,
+  FlashList,
   DefaultCustomLabels,
   Snap,
   RevealHeaderOnScroll,
   RevealHeaderOnScrollSnap,
   Lazy,
+  LazyNoFade,
+  MasonryFlashList,
   ScrollableTabs,
   CenteredEmptyList,
   ScrollOnHeader,
@@ -165,7 +171,7 @@ const styles = StyleSheet.create({
   statusbar: {
     height: Platform.select({
       android: Constants.statusBarHeight,
-      ios: Platform.Version < 11 ? Constants.statusBarHeight : 0,
+      ios: 0,
     }),
   },
   appbar: {
