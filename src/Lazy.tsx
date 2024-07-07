@@ -38,15 +38,6 @@ export const Lazy: React.FC<{
   const { focusedTab, refMap } = useTabsContext()
 
   /**
-   * We start mounted if we are the focused tab, or if props.startMounted is true.
-   */
-  const startMounted = useSharedValue(
-    typeof _startMounted === 'boolean'
-      ? _startMounted
-      : focusedTab.value === name
-  )
-
-  /**
    * We keep track of whether a layout has been triggered
    */
   const didTriggerLayout = useSharedValue(false)
@@ -54,13 +45,24 @@ export const Lazy: React.FC<{
   /**
    * This is used to control when children are mounted
    */
-  const [canMount, setCanMount] = React.useState(!!startMounted.value)
+  const [canMount, setCanMount] = React.useState(false)
   /**
    * Ensure we don't mount after the component has been unmounted
    */
   const isSelfMounted = React.useRef(true)
 
-  const opacity = useSharedValue(cancelLazyFadeIn || startMounted.value ? 1 : 0)
+  /**
+   * We start mounted if we are the focused tab, or if props.startMounted is true.
+   */
+  const shouldStartMounted =
+    typeof _startMounted === 'boolean'
+      ? _startMounted
+      : focusedTab.value === name
+  let initialOpacity = 1
+  if (!cancelLazyFadeIn && !shouldStartMounted) {
+    initialOpacity = 0
+  }
+  const opacity = useSharedValue(initialOpacity)
 
   React.useEffect(() => {
     return () => {
@@ -68,14 +70,17 @@ export const Lazy: React.FC<{
     }
   }, [])
 
-  const startMountTimer = React.useCallback(() => {
-    // wait the scene to be at least mountDelay ms focused, before mounting
-    setTimeout(() => {
-      if (focusedTab.value === name) {
-        if (isSelfMounted.current) setCanMount(true)
-      }
-    }, mountDelayMs)
-  }, [focusedTab.value, mountDelayMs, name])
+  const startMountTimer = React.useCallback(
+    (focusedTab: string) => {
+      // wait the scene to be at least mountDelay ms focused, before mounting
+      setTimeout(() => {
+        if (focusedTab === name) {
+          if (isSelfMounted.current) setCanMount(true)
+        }
+      }, mountDelayMs)
+    },
+    [mountDelayMs, name]
+  )
 
   useAnimatedReaction(
     () => {
@@ -87,7 +92,7 @@ export const Lazy: React.FC<{
           opacity.value = 1
           runOnJS(setCanMount)(true)
         } else {
-          runOnJS(startMountTimer)()
+          runOnJS(startMountTimer)(focusedTab.value)
         }
       }
     },
@@ -116,7 +121,7 @@ export const Lazy: React.FC<{
     return {
       opacity: opacity.value,
     }
-  }, [])
+  }, [opacity])
 
   const onLayout = useCallback(() => {
     didTriggerLayout.value = true

@@ -1,3 +1,48 @@
+
+
+# [8.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.1...v8.0.0) (2024-07-05)
+
+
+### Code Refactoring
+
+* **hooks, container:** perf: avoid reading .value outside worklet ([08a1c51](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/08a1c51f1aefbe13dd30dbfb62b7d19848835838))
+
+
+### BREAKING CHANGES
+
+* **hooks, container:** headerHeight, tabBarHeight, containerHeight, and
+contentInset are no longer SharedValues.
+
+If you consume useHeaderMeasurements and/or useTabsContext expect this
+to impact you.
+
+## [7.0.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v7.0.0...v7.0.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* dynamic tab sync ([75c6e3a](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/75c6e3a0190428140d3faaaf07c95fb53cb091cf))
+* indicator display for single tab ([ed67c03](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/ed67c03be57d67f91bab3172333166a8ba05b494))
+
+# [7.0.0](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.2...v7.0.0) (2024-04-04)
+
+
+### chore
+
+* update dependencies ([eb8b645](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/eb8b645e5f83a99a402a0fa56d2d897bba26df4d))
+
+
+### BREAKING CHANGES
+
+* Peer dependency changed to reanimated 3.8.1
+
+## [6.2.2](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.1...v6.2.2) (2024-04-03)
+
+
+### Bug Fixes
+
+* lazy FlashList scroll sync issue ([1b89ec7](https://github.com/PedroBern/react-native-collapsible-tab-view/commit/1b89ec7221dc87792fc56886b170ff6f1d06e230))
+
 ## [6.2.1](https://github.com/PedroBern/react-native-collapsible-tab-view/compare/v6.2.0...v6.2.1) (2023-08-10)
 
 

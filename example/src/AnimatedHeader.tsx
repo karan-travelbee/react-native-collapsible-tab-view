@@ -7,10 +7,10 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated'
 
-import { useCurrentTabScrollY } from '../../src/hooks'
 import ExampleComponent from './Shared/ExampleComponent'
 import ReText from './Shared/ReText'
 import { ExampleComponentType } from './types'
+import { useCurrentTabScrollY } from '../../src/hooks'
 
 const title = 'Animated Header'
 
@@ -30,8 +30,8 @@ export const Header = () => {
         {
           translateY: interpolate(
             top.value,
-            [0, -(height.value || 0 - MIN_HEADER_HEIGHT)],
-            [0, (height.value || 0 - MIN_HEADER_HEIGHT) / 2]
+            [0, -(height || 0 - MIN_HEADER_HEIGHT)],
+            [0, (height || 0 - MIN_HEADER_HEIGHT) / 2]
           ),
         },
       ],

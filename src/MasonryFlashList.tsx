@@ -1,12 +1,13 @@
 import { MasonryFlashListProps, MasonryFlashListRef } from '@shopify/flash-list'
 import React, { useCallback } from 'react'
-import Animated from 'react-native-reanimated'
+import Animated, {
+  useAnimatedReaction,
+  useSharedValue,
+} from 'react-native-reanimated'
 
 import {
-  useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
-  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -24,9 +25,8 @@ type MasonryFlashListMemoProps = React.PropsWithChildren<
 >
 type MasonryFlashListMemoRef = MasonryFlashListRef<any>
 
-let AnimatedMasonry: React.ComponentClass<
-  MasonryFlashListProps<any>
-> | null = null
+let AnimatedMasonry: React.ComponentClass<MasonryFlashListProps<any>> | null =
+  null
 
 const ensureMasonry = () => {
   if (AnimatedMasonry) {
@@ -35,10 +35,10 @@ const ensureMasonry = () => {
 
   try {
     const flashListModule = require('@shopify/flash-list')
-    AnimatedMasonry = (Animated.createAnimatedComponent(
+    AnimatedMasonry = Animated.createAnimatedComponent(
       flashListModule.MasonryFlashList
-    ) as unknown) as React.ComponentClass<MasonryFlashListProps<any>>
-  } catch (error) {
+    ) as unknown as React.ComponentClass<MasonryFlashListProps<any>>
+  } catch {
     console.error(
       'The optional dependency @shopify/flash-list is not installed. Please install it to use the FlashList component.'
     )
@@ -76,12 +76,22 @@ function MasonryFlashListImpl<R>(
 
   const { scrollHandler, enable } = useScrollHandlerY(name)
 
-  const onLayout = useAfterMountEffect(rest.onLayout, () => {
-    'worklet'
-    // we enable the scroll event after mounting
-    // otherwise we get an `onScroll` call with the initial scroll position which can break things
-    enable(true)
-  })
+  const hadLoad = useSharedValue(false)
+
+  const onLoad = useCallback(() => {
+    hadLoad.value = true
+  }, [hadLoad])
+
+  useAnimatedReaction(
+    () => {
+      return hadLoad.value
+    },
+    (ready) => {
+      if (ready) {
+        enable(true)
+      }
+    }
+  )
 
   const { progressViewOffset, contentContainerStyle } = useCollapsibleStyle()
 
@@ -94,10 +104,10 @@ function MasonryFlashListImpl<R>(
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(
-    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-      onContentSizeChange,
-      scrollContentSizeChange,
-    ])
+    React.useMemo(
+      () => [scrollContentSizeChange, onContentSizeChange],
+      [onContentSizeChange, scrollContentSizeChange]
+    )
   )
 
   const memoRefreshControl = React.useMemo(
@@ -110,15 +120,14 @@ function MasonryFlashListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const contentInsetValue = useConvertAnimatedToValue<number>(contentInset)
-
-  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-    contentInsetValue,
-  ])
+  const memoContentInset = React.useMemo(
+    () => ({ top: contentInset }),
+    [contentInset]
+  )
 
   const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInsetValue }),
-    [contentInsetValue]
+    () => ({ x: 0, y: -contentInset }),
+    [contentInset]
   )
 
   const memoContentContainerStyle = React.useMemo(
@@ -145,7 +154,7 @@ function MasonryFlashListImpl<R>(
     // @ts-expect-error typescript complains about `unknown` in the memo, it should be T
     <MasonryFlashListMemo
       {...rest}
-      onLayout={onLayout}
+      onLoad={onLoad}
       contentContainerStyle={memoContentContainerStyle}
       ref={refWorkaround}
       bouncesZoom={false}

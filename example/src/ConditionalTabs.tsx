@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
-import { TabBarProps } from '../../src/types'
 import ExampleComponent from './Shared/ExampleComponent'
 import { ExampleComponentType } from './types'
+import { TabBarProps } from '../../src/types'
 
 const title = 'Conditional Tabs'
 

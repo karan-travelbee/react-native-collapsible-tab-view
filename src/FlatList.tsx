@@ -6,7 +6,6 @@ import {
   useAfterMountEffect,
   useChainCallback,
   useCollapsibleStyle,
-  useConvertAnimatedToValue,
   useScrollHandlerY,
   useSharedAnimatedRef,
   useTabNameContext,
@@ -63,10 +62,10 @@ function FlatListImpl<R>(
   })
 
   const scrollContentSizeChangeHandlers = useChainCallback(
-    React.useMemo(() => [scrollContentSizeChange, onContentSizeChange], [
-      onContentSizeChange,
-      scrollContentSizeChange,
-    ])
+    React.useMemo(
+      () => [scrollContentSizeChange, onContentSizeChange],
+      [onContentSizeChange, scrollContentSizeChange]
+    )
   )
 
   const memoRefreshControl = React.useMemo(
@@ -79,15 +78,14 @@ function FlatListImpl<R>(
     [progressViewOffset, refreshControl]
   )
 
-  const contentInsetValue = useConvertAnimatedToValue(contentInset)
-
-  const memoContentInset = React.useMemo(() => ({ top: contentInsetValue }), [
-    contentInsetValue,
-  ])
+  const memoContentInset = React.useMemo(
+    () => ({ top: contentInset }),
+    [contentInset]
+  )
 
   const memoContentOffset = React.useMemo(
-    () => ({ x: 0, y: -contentInsetValue }),
-    [contentInsetValue]
+    () => ({ x: 0, y: -contentInset }),
+    [contentInset]
   )
 
   const memoContentContainerStyle = React.useMemo(
